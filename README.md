@@ -6,7 +6,7 @@
 
 ---
 
-项目结构
+**项目结构**
 
 chatbi50/
 ├── init_db.py            # 生成 50 张表的示例数据
@@ -18,12 +18,11 @@ chatbi50/
 <img width="474" height="162" alt="image" src="https://github.com/user-attachments/assets/2c89fdfa-b7b6-4522-a4ab-2c7d7cb1cb9c" />
 
 
-## 🏗️ 系统架构
+## 系统架构
 <img width="1352" height="1296" alt="image" src="https://github.com/user-attachments/assets/2f72b9c1-57a9-4bc2-bc34-8387a4a67ffe" />
 系统流程：
 <img width="988" height="1652" alt="image" src="https://github.com/user-attachments/assets/24099bfc-8df1-4c4d-8ae4-deaa5b1eee65" />
-## 📊 数据模型
-
+## 数据模型
 模拟电商场景，共 **50 张表**，覆盖 **6 个业务域**：
 
 | 业务域 | 表数量 | 代表表 |
@@ -37,7 +36,7 @@ chatbi50/
 
 ---
 
-API 接口
+**API 接口**
 接口	方法	说明
 /	GET	健康检查
 /tables	GET	列出所有注册的表
@@ -46,14 +45,14 @@ API 接口
 /cache/clear	POST	清空缓存
 
 
-性能对比
+**性能对比**
 指标	无缓存	有缓存
 LLM 调用次数	2 次/请求	0 次
 响应时间（本地 7B）	30-90 秒	< 1 秒
 响应时间（DeepSeek）	2-4 秒	< 1 秒
 
 
-## 🚀 快速开始
+## 快速开始
 
 ### 1. 安装依赖
 
@@ -62,10 +61,8 @@ pip install fastapi uvicorn streamlit openai pandas numpy plotly requests sqlalc
 
 
 
-**2. 生成示例数据**
-方式一：环境变量（推荐）
-bash
-
+**2. 环境变量 **
+方式一：deepseek（推荐，需要API key）
 # Windows PowerShell
 $env:DEEPSEEK_API_KEY="sk-你的真实key"
 
@@ -73,30 +70,24 @@ $env:DEEPSEEK_API_KEY="sk-你的真实key"
 export DEEPSEEK_API_KEY="sk-你的真实key"
 
 方式二：本地 Ollama（无需 API Key）
-
 修改 main.py：
-python
-
 LOCAL_BASE_URL = "http://localhost:11434/v1"
 LOCAL_API_KEY = "ollama"
 MODEL = "qwen2.5:7b"
 client = OpenAI(api_key=LOCAL_API_KEY, base_url=LOCAL_BASE_URL)
 
-4. 启动服务
+**3. 启动服务**
 
 窗口 1：后端
-bash
-
 uvicorn main:app --reload --port 8000
 
 窗口 2：前端
-bash
-
 streamlit run app.py
 
 浏览器打开 http://localhost:8501。
 
-使用示例
+
+**使用示例**
 问题	涉及表
 各个地区的订单总金额	orders + customers + cities + regions
 销售额最高的5个产品	order_details + products
@@ -106,8 +97,6 @@ streamlit run app.py
 北京客户的订单数量	orders + customers + cities
 电子产品类别的平均价格	products + categories
 退货率最高的产品	order_returns + order_details + products
-
-
 
 ## ✨ 核心特性
 
@@ -119,41 +108,31 @@ streamlit run app.py
 - **多轮会话**：结合上下文理解追问，如「那华南呢？」
 - **智能图表**：根据字段类型自动推荐柱状图 / 折线图 / 表格
 
----
+**技术亮点**
 
-技术亮点
 1. 两阶段检索
 
 50 张表全量塞给 LLM 会超 token 且准确率下降。采用两阶段检索：
-
     第一阶段：域路由，把问题分到 1-3 个业务域
-
     第二阶段：域内向量检索，找 top-6 相关表
-
 效果：Schema token 从 2 万降到 2 千，降低 90%。
+
 2. NL2SQL 三层优化
 层次	手段	作用
 第一层	Schema 裁剪	只传相关表，减少干扰
 第二层	Few-shot	给相似问题的正确 SQL
 第三层	自我纠错	执行失败后让 LLM 修正
+
 3. 缓存机制
-
     Key 设计：问题 + 最近 2 轮历史的 MD5
-
     命中效果：0 次 LLM 调用，响应 < 1 秒
-
     淘汰策略：TTL 1 小时 + LRU
 
 4. SQL 安全校验
-
 三层防护：
-
     关键字黑名单（DROP / DELETE / UPDATE 等）
-
     必须以 SELECT 开头
-
     不允许多语句执行
-
 后续计划
     补充测试集与准确率统计
     增加流式输出
