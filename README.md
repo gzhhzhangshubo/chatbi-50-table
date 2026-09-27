@@ -15,6 +15,7 @@ chatbi50/
 ├── app.py                # Streamlit 前端
 ├── .gitignore            # Git 忽略配置
 └── README.md             # 项目说明
+<img width="474" height="162" alt="image" src="https://github.com/user-attachments/assets/2c89fdfa-b7b6-4522-a4ab-2c7d7cb1cb9c" />
 
 
 ## 🏗️ 系统架构
