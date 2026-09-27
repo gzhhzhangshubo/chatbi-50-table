@@ -160,3 +160,8 @@ streamlit run app.py
       支持更多数据源（MySQL、PostgreSQL）
        集成 RAG 知识库
        开发数据分析 Agent
+
+
+欢迎讨论：
+845996912@qq.com 
+
