@@ -2,6 +2,7 @@
 Streamlit 前端
 有缓存机制
 '''
+sys.path.append('.')
 import streamlit as st
 import requests
 import pandas as pd
