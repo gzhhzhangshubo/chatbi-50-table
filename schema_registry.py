@@ -140,6 +140,7 @@ class DomainRouter:
 ### ============ Schema 检索器 ============
 class SchemaRetriever:
     def __init__(self, model_name: str = "BAAI/bge-small-zh-v1.5"):  #使用远程模型
+        # 不要用 Ollama 的 bge-m3，云端没有 Ollama 服务。
         print(f"📦 加载 Embedding 模型：{model_name} ...")
         self.model = SentenceTransformer(model_name)
         self.router = DomainRouter(self.model)
