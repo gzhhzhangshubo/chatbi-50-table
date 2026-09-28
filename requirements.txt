@@ -1,0 +1,8 @@
+streamlit
+openai
+pandas
+numpy
+plotly
+sqlalchemy
+faiss-cpu
+sentence-transformers
